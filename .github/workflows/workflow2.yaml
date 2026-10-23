@@ -1,15 +1,13 @@
-name: Welcome to the party! (second)
-
+name: Welcome to the party (second)
 on:
   workflow_dispatch:
-
 jobs:
   say_hello:
-  name: "Let's greet the user!"
-  runs-on: ubuntu-latest
-  steps:
-    - run: echo "Hello user!"
-    - uses: actions/checkout@v3
-    - run: .cat/./github/workflows/list.txt
-      name: display contents of lit.
-    - run: echo "This is step 4"
+    name: "Let's greet the user!"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello user!"
+      - uses: actions/checkout@v3
+      - run: .cat/./github/workflows/list.txt
+        name: display contents of lit.
+      - run: echo "This is step 4"
