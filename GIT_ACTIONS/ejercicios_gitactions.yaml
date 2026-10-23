@@ -3,6 +3,6 @@ on:
 
 jobs:
   say-hello:
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     steps:
-      -run: echo "hello there"
+      - run: echo "hello there!"
