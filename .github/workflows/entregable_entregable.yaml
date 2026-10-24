@@ -5,12 +5,15 @@ on:
     inputs:
       testseguridad:
         description: 'Would you like to run the security tests?'
-        required: True
+        required: true
         type: boolean
-        default: False
+        default: false
 
 jobs:
-  say-hello:
+  security:
     runs-on: ubuntu-latest
+    if: ${{ inputs.testseguridad == true }}
     steps:
       - run: echo "hello there!"
+
+    
