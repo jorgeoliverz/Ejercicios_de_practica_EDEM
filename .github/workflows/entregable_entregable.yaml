@@ -1,0 +1,14 @@
+name: Workflow de seguridad (entregable de clase)
+
+on:
+  workflow_dispatch:
+  inputs:
+    testseguridad:
+    description: 'Would you like to run the security tests?'
+    required: True
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "hello there!"
