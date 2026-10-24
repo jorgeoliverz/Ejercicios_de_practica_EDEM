@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   inputs:
     testseguridad:
-    description: 'Would you like to run the security tests?'
-    required: True
+      description: 'Would you like to run the security tests?'
+      required: True
 
 jobs:
   say-hello:
