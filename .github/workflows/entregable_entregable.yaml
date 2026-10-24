@@ -2,7 +2,7 @@ name: Workflow de seguridad (entregable de clase)
 
 on:
   workflow_dispatch:
-    inputs:
+    inputs: #petición al usuario de declarar si quiere runnear o no el test "security" de tipo booleano donde el valor default es false.
       testseguridad:
         description: 'Would you like to run the security tests?'
         required: true
@@ -12,8 +12,8 @@ on:
 jobs:
   security:
     runs-on: ubuntu-latest
-    if: ${{ inputs.testseguridad == true }}
-    steps:
-      - run: echo "hello there!"
+    if: ${{ inputs.testseguridad == true }} #en el caso de que el input sea true, ejecuta esto...
+    steps: 
+      - uses: actions/requests
 
     
