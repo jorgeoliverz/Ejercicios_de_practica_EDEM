@@ -6,7 +6,7 @@ on:
       testseguridad:
         description: 'Would you like to run the security tests?'
         required: True
-        type: checkbox
+        type: boolean
         default: False
 
 jobs:
