@@ -12,8 +12,10 @@ on:
 jobs:
   security:
     runs-on: ubuntu-latest
-    if: ${{ inputs.testseguridad == true }} #en el caso de que el input sea true, ejecuta esto...
-    steps: 
-      - uses: actions/requests
-
+    if: ${{ inputs.testseguridad == true }} #en el caso de que el input sea true, ejecuta esto...(añadir al step correspondiente).
+    steps:
+      - name: Step 1 - Descargar/Clonar el repo en el runner
+      - uses: actions/checkout@v4 #action oficial de Github para descargar el repo en la máquina
+      - name: Step 2 - Validar el archivo JSON (syntax)
+      - run: 
     
