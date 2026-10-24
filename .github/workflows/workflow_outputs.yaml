@@ -1,0 +1,13 @@
+name: Outputs Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  say_hello:
+  runs-on: ubuntu-latest
+  steps:
+    - id: get-time
+      name: Grab the current time
+      run: |
+        
