@@ -17,5 +17,6 @@ jobs:
       - name: Step 1 - Descargar/Clonar el repo en el runner
       - uses: actions/checkout@v4 #action oficial de Github para descargar el repo en la máquina
       - name: Step 2 - Validar el archivo JSON (syntax)
-      - run: 
+      - run: python3 -m json.tool ventas.json #comando nativo de python que lee y válida el archivo .json (ventas.json)
+
     
