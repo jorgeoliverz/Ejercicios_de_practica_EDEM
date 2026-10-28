@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Step 1 - Descargar/Clonar el repo en el runner
-      - uses: actions/checkout@v4 #action oficial de Github para descargar el repo en la máquina
+        uses: actions/checkout@v4 #action oficial de Github para descargar el repo en la máquina
 
       - name: Step 2 - Validar el archivo JSON (syntax)
-      - run: python3 -m json.tool ventas.json #comando nativo de python que lee y válida el archivo .json (ventas.json)
+        run: python3 -m json.tool ventas.json #comando nativo de python que lee y válida el archivo .json (ventas.json)
 
       - name: Step 3 - Comprobando seguridad de las APIs expuestas
         if: ${{ inputs.testseguridad == true }} #en el caso de que el input sea true, ejecuta esto...
