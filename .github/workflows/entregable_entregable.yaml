@@ -28,4 +28,9 @@ jobs:
     strategy:
       matrix:
         environment: [staging,production] #definimos los environments que vamos a usar para el job (previamente hay que crearlos.
-    
+    steps:
+      - name: Step 1 - Generar los reportes en cada environment #SIN TERMINAR
+        uses: 
+      
+      - name: Step 2 - Subir los reportes de cada environment 
+        uses: actions/upload-artifact #con este action nos permite subir los artefacts generados en el step 1 a github
