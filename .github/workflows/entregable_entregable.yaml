@@ -29,8 +29,10 @@ jobs:
       matrix:
         environment: [staging,production] #definimos los environments que vamos a usar para el job (previamente hay que crearlos.
     steps:
-      - name: Step 1 - Generar los reportes en cada environment #SIN TERMINAR
-        uses: 
+      - name: Step 1 - Descargar/Clonar el repo en el runner #SIN TERMINAR
+        uses: actions/checkout@v4 #volvemos a descargar el repo, ya que, cada job es independiente al anterior
+
+      - name: Step 2 - Generar los reportes en cada environment
       
-      - name: Step 2 - Subir los reportes de cada environment 
+      - name: Step 3 - Subir los reportes de cada environment 
         uses: actions/upload-artifact #con este action nos permite subir los artefacts generados en el step 1 a github
