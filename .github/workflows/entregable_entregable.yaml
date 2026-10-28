@@ -32,7 +32,7 @@ jobs:
       - name: Step 1 - Descargar/Clonar el repo en el runner #SIN TERMINAR
         uses: actions/checkout@v4 #volvemos a descargar el repo, ya que, cada job es independiente al anterior
 
-      - name: Step 2 - Generar los reportes en cada environment
+      - name: Step 2 - Generar los reportes en cada environment #procesar VENTAS.JSON en cada environment
       
       - name: Step 3 - Subir los reportes de cada environment 
         uses: actions/upload-artifact #con este action nos permite subir los artefacts generados en el step 1 a github
