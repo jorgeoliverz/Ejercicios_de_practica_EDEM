@@ -34,10 +34,10 @@ jobs:
 
       - name: Step 2 - Generar los reportes en cada environment #procesar VENTAS.JSON en cada environment
         run: |
-          echo "===ENVIRONMENT REPORT==" > reporte_${{matrix.environment}}.txt
-          echo "Selected environment ${{matrix.environment}}" >> reporte_${{matrix.environment}}.txt
+          echo "===ENVIRONMENT REPORT==" > reporte_${{matrix.environment}}.txt 
+          echo "Selected environment: ${{matrix.environment}}" >> reporte_${{matrix.environment}}.txt
           echo "Process finished succesfully" >> reporte_${{matrix.environment}}.txt
           echo "Execution date $(date)" >> reporte_${{matrix.environment}}.txt
 
       - name: Step 3 - Subir los reportes de cada environment 
-        uses: actions/upload-artifact@v4 #con este action nos permite subir los artefacts generados en el step 1 a github
+        uses: actions/upload-artifact@v5 #con este action nos permite subir los artefacts generados en el step 1 a github
