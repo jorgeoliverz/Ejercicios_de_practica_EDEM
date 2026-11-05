@@ -1,0 +1,21 @@
+.env
+venv
+
+# Claude Code files
+.claude/
+CLAUDE.md
+SECURITY_CHECKLIST.md
+
+# Postman collections and environments
+*.postman_collection.json
+*.postman_environment.json
+*.postman_globals.json
+postman/
+Postman/
+
+# Demo projects (not tracked in git)
+x-api-demo-simple/
+
+# Python bytecode
+__pycache__/
+*.pyc

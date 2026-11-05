@@ -1,0 +1,16 @@
+# Exercise 13: OAuth with GitHub - Python Dependencies
+
+# Web framework (includes the "fastapi" command, the dev server and httpx, which Authlib uses)
+fastapi[standard]==0.162.0
+
+# JWT encoding and decoding
+PyJWT==2.15.1
+
+# OAuth client (Authorization Code + PKCE)
+Authlib==1.9.1
+
+# Signs the session cookie used by SessionMiddleware
+itsdangerous==2.2.0
+
+# Reads the .env file of the exercise at startup
+python-dotenv==1.2.4
