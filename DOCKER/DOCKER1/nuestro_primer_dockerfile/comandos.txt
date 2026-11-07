@@ -1,0 +1,9 @@
+docker --version (versión del cliente)
+docker run hello-world (ejecutar el contenedor)
+
+PASO 3:
+docker build -t 1dockerfile .
+(crea una imagen a partir de este directorio (buscará el dockerfile sino, dará error) con nombre "1dockerfile")
+
+PASO 4:
+docker run --name 1dockerfilec 1dockerfile

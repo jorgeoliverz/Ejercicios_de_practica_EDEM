@@ -1,0 +1,12 @@
+# Descargamos la imagen de python slim de docker hub
+FROM python:3.11-slim
+# El lugar donde queremos que trabaje (dentro de la imagen, todo sucede en /app)
+WORKDIR /app
+# Copia los archivos de mi ordenador a /app(primer punto = directorio actual, segundo punto = resto del código)
+COPY requirements.txt ./
+# El resto de los archivos se copian después de instalar las dependencias para aprovechar la cache de docker
+RUN pip install --no-cache-dir -r requirements.txt
+# Copia los archivos de mi ordenador a /app(primer punto = directorio actual, segundo punto = directorio /app)
+COPY . .
+# Ejecuta esto (comando + archivo)
+CMD ["python", "main.py"]

@@ -1,0 +1,8 @@
+# Descargamos la imagen de python slim de docker hub
+FROM python:3.11-slim
+# El lugar donde queremos que trabaje (dentro de la imagen, todo sucede en /app)
+WORKDIR /app
+# Copia los archivos de mi ordenador a /app(primer punto = directorio actual, segundo punto = directorio /app)
+COPY . .
+# Ejecuta esto (comando + archivo)
+CMD ["python", "main.py"]

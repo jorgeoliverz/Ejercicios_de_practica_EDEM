@@ -1,0 +1,9 @@
+Poner esto en terminal: 
+(descargamos 3 imágenes distintas de docker hub)
+
+docker pull python:3.11-slim
+docker pull python:3.11-alpine
+docker pull python 3.11
+
+(comprobamos el tamaño de cada imagen descargada)
+docker images python
