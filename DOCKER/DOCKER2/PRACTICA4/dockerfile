@@ -1,0 +1,3 @@
+FROM ubuntu
+RUN apt update && apt install -y git && apt install nano
+CMD ["bash"]
