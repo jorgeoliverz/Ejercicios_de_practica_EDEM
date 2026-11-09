@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de cuota de hipoteca</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #1e293b;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --accent: #0d9488;
+      --accent-dark: #0f766e;
+      --accent-soft: #ccfbf1;
+      --danger: #dc2626;
+      --danger-soft: #fef2f2;
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, #134e4a 0%, transparent 45%),
+        radial-gradient(circle at 85% 90%, #1e3a8a 0%, transparent 45%),
+        var(--bg);
+    }
+
+    .app {
+      width: 100%;
+      max-width: 880px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 30px 70px rgba(2, 6, 23, 0.45);
+    }
+
+    /* ---------- Panel de entrada ---------- */
+    .form-panel { padding: 40px 38px; }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 5px 11px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      background: var(--accent-soft);
+      border-radius: 999px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 27px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      margin: 0 0 30px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .field { margin-bottom: 20px; }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .input-wrap { position: relative; }
+
+    input {
+      width: 100%;
+      padding: 13px 46px 13px 14px;
+      font-size: 16px;
+      font-family: inherit;
+      color: var(--text);
+      background: #f8fafc;
+      border: 1.5px solid var(--line);
+      border-radius: 11px;
+      outline: none;
+      transition: border-color .18s, box-shadow .18s, background .18s;
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    input:focus {
+      background: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.14);
+    }
+
+    input.invalid {
+      border-color: var(--danger);
+      background: var(--danger-soft);
+    }
+
+    input.invalid:focus { box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12); }
+
+    .unit {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .error {
+      display: none;
+      margin-top: 6px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--danger);
+    }
+
+    .error.visible { display: block; }
+
+    button {
+      width: 100%;
+      margin-top: 6px;
+      padding: 15px;
+      font-size: 15.5px;
+      font-weight: 700;
+      font-family: inherit;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      border: 0;
+      border-radius: 11px;
+      cursor: pointer;
+      transition: transform .12s, box-shadow .18s, filter .18s;
+      box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
+    }
+
+    button:hover { filter: brightness(1.06); box-shadow: 0 10px 26px rgba(13, 148, 136, 0.38); }
+    button:active { transform: translateY(1px); }
+    button:focus-visible { outline: 3px solid rgba(13, 148, 136, 0.45); outline-offset: 2px; }
+
+    .disclaimer {
+      margin: 18px 0 0;
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: #94a3b8;
+    }
+
+    /* ---------- Panel de resultados ---------- */
+    .result-panel {
+      display: flex;
+      flex-direction: column;
+      padding: 40px 34px;
+      color: #e2e8f0;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(13, 148, 136, 0.35), transparent 55%),
+        var(--bg-soft);
+    }
+
+    .result-label {
+      margin: 0 0 6px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+
+    .monthly {
+      margin: 0 0 4px;
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .monthly small {
+      font-size: 16px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .result-note {
+      margin: 0 0 26px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .stats {
+      display: grid;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    .stat {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 12px;
+    }
+
+    .stat span {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .stat strong {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .bar-wrap { margin-top: 22px; }
+
+    .bar {
+      display: flex;
+      height: 9px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+    }
+
+    .bar-capital { background: var(--accent); }
+    .bar-interest { background: #f59e0b; }
+
+    .legend {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 9px;
+      font-size: 11.5px;
+      color: #94a3b8;
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin-right: 6px;
+      border-radius: 50%;
+    }
+
+    .placeholder {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      min-height: 220px;
+      text-align: center;
+      color: #94a3b8;
+    }
+
+    .placeholder .icon { font-size: 34px; margin-bottom: 12px; opacity: 0.75; }
+    .placeholder p { margin: 0; font-size: 13.5px; line-height: 1.6; max-width: 220px; }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 720px) {
+      .app { grid-template-columns: 1fr; }
+      .form-panel, .result-panel { padding: 30px 24px; }
+      .monthly { font-size: 38px; }
+      .stats { margin-top: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="form-panel">
+      <span class="eyebrow">Sistema francés</span>
+      <h1>Calculadora de cuota de hipoteca</h1>
+      <p class="subtitle">Introduce el importe, el tipo de interés anual y el plazo para conocer tu cuota mensual.</p>
+
+      <form id="mortgage-form" novalidate>
+        <div class="field">
+          <label for="amount">Importe de la hipoteca</label>
+          <div class="input-wrap">
+            <input id="amount" name="amount" type="number" inputmode="decimal" step="any" placeholder="200000" autocomplete="off">
+            <span class="unit">€</span>
+          </div>
+          <p class="error" id="amount-error"></p>
+        </div>
+
+        <div class="field">
+          <label for="rate">Tipo de interés anual</label>
+          <div class="input-wrap">
+            <input id="rate" name="rate" type="number" inputmode="decimal" step="any" placeholder="3.5" autocomplete="off">
+            <span class="unit">%</span>
+          </div>
+          <p class="error" id="rate-error"></p>
+        </div>
+
+        <div class="field">
+          <label for="years">Plazo</label>
+          <div class="input-wrap">
+            <input id="years" name="years" type="number" inputmode="numeric" step="any" placeholder="30" autocomplete="off">
+            <span class="unit">años</span>
+          </div>
+          <p class="error" id="years-error"></p>
+        </div>
+
+        <button type="submit">Calcular cuota</button>
+      </form>
+
+      <p class="disclaimer">Cálculo orientativo con cuota constante (sistema francés). No incluye comisiones, seguros ni otros gastos.</p>
+    </section>
+
+    <section class="result-panel" aria-live="polite">
+      <div id="placeholder" class="placeholder">
+        <div class="icon">🏠</div>
+        <p>Rellena los datos y pulsa «Calcular cuota» para ver el resultado.</p>
+      </div>
+
+      <div id="results" class="hidden">
+        <p class="result-label">Cuota mensual</p>
+        <p class="monthly"><span id="monthly-payment">0,00 €</span> <small>/mes</small></p>
+        <p class="result-note" id="result-note"></p>
+
+        <div class="stats">
+          <div class="stat">
+            <span>Total pagado</span>
+            <strong id="total-paid">0,00 €</strong>
+          </div>
+          <div class="stat">
+            <span>Intereses totales</span>
+            <strong id="total-interest">0,00 €</strong>
+          </div>
+        </div>
+
+        <div class="bar-wrap">
+          <div class="bar">
+            <div id="bar-capital" class="bar-capital" style="width: 0%"></div>
+            <div id="bar-interest" class="bar-interest" style="width: 0%"></div>
+          </div>
+          <div class="legend">
+            <span><i style="background: var(--accent)"></i>Capital</span>
+            <span><i style="background: #f59e0b"></i>Intereses</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var form = document.getElementById('mortgage-form');
+      var amountInput = document.getElementById('amount');
+      var rateInput = document.getElementById('rate');
+      var yearsInput = document.getElementById('years');
+
+      var placeholder = document.getElementById('placeholder');
+      var results = document.getElementById('results');
+      var monthlyEl = document.getElementById('monthly-payment');
+      var noteEl = document.getElementById('result-note');
+      var totalPaidEl = document.getElementById('total-paid');
+      var totalInterestEl = document.getElementById('total-interest');
+      var barCapital = document.getElementById('bar-capital');
+      var barInterest = document.getElementById('bar-interest');
+
+      var euro = new Intl.NumberFormat('es-ES', {
+        style: 'currency',
+        currency: 'EUR',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+      function parseValue(input) {
+        // Acepta tanto "3,5" como "3.5"
+        return Number(String(input.value).trim().replace(',', '.'));
+      }
+
+      function setError(input, errorEl, message) {
+        if (message) {
+          input.classList.add('invalid');
+          input.setAttribute('aria-invalid', 'true');
+          errorEl.textContent = message;
+          errorEl.classList.add('visible');
+        } else {
+          input.classList.remove('invalid');
+          input.removeAttribute('aria-invalid');
+          errorEl.textContent = '';
+          errorEl.classList.remove('visible');
+        }
+      }
+
+      function validate() {
+        var valid = true;
+
+        var amount = parseValue(amountInput);
+        var rate = parseValue(rateInput);
+        var years = parseValue(yearsInput);
+
+        if (amountInput.value.trim() === '' || Number.isNaN(amount)) {
+          setError(amountInput, document.getElementById('amount-error'), 'Introduce un importe válido.');
+          valid = false;
+        } else if (amount < 0) {
+          setError(amountInput, document.getElementById('amount-error'), 'El importe no puede ser negativo.');
+          valid = false;
+        } else if (amount === 0) {
+          setError(amountInput, document.getElementById('amount-error'), 'El importe debe ser mayor que 0.');
+          valid = false;
+        } else {
+          setError(amountInput, document.getElementById('amount-error'), '');
+        }
+
+        if (rateInput.value.trim() === '' || Number.isNaN(rate)) {
+          setError(rateInput, document.getElementById('rate-error'), 'Introduce un tipo de interés válido.');
+          valid = false;
+        } else if (rate < 0) {
+          setError(rateInput, document.getElementById('rate-error'), 'El tipo de interés no puede ser negativo.');
+          valid = false;
+        } else {
+          setError(rateInput, document.getElementById('rate-error'), '');
+        }
+
+        if (yearsInput.value.trim() === '' || Number.isNaN(years)) {
+          setError(yearsInput, document.getElementById('years-error'), 'Introduce un plazo válido.');
+          valid = false;
+        } else if (years < 0) {
+          setError(yearsInput, document.getElementById('years-error'), 'El plazo no puede ser negativo.');
+          valid = false;
+        } else if (years === 0) {
+          setError(yearsInput, document.getElementById('years-error'), 'El plazo debe ser mayor que 0.');
+          valid = false;
+        } else if (years < 1) {
+          setError(yearsInput, document.getElementById('years-error'), 'El plazo mínimo es de 1 año.');
+          valid = false;
+        } else {
+          setError(yearsInput, document.getElementById('years-error'), '');
+        }
+
+        return valid ? { amount: amount, rate: rate, years: years } : null;
+      }
+
+      function calculate(data) {
+        var months = Math.round(data.years * 12);
+        var monthlyRate = data.rate / 100 / 12;
+        var payment;
+
+        if (monthlyRate === 0) {
+          // Sin intereses: el capital se reparte a partes iguales
+          payment = data.amount / months;
+        } else {
+          // Fórmula del sistema francés (cuota constante)
+          payment = data.amount * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months));
+        }
+
+        var totalPaid = payment * months;
+        var totalInterest = totalPaid - data.amount;
+
+        return {
+          months: months,
+          payment: payment,
+          totalPaid: totalPaid,
+          totalInterest: totalInterest
+        };
+      }
+
+      function render(data, result) {
+        placeholder.classList.add('hidden');
+        results.classList.remove('hidden');
+
+        monthlyEl.textContent = euro.format(result.payment);
+        noteEl.textContent = result.months + ' cuotas mensuales · ' +
+          (data.rate === 0
+            ? 'sin intereses'
+            : 'interés anual del ' + data.rate.toLocaleString('es-ES', { maximumFractionDigits: 2 }) + '%');
+        totalPaidEl.textContent = euro.format(result.totalPaid);
+        totalInterestEl.textContent = euro.format(result.totalInterest);
+
+        var interestShare = result.totalPaid > 0
+          ? (result.totalInterest / result.totalPaid) * 100
+          : 0;
+
+        barInterest.style.width = interestShare.toFixed(2) + '%';
+        barCapital.style.width = (100 - interestShare).toFixed(2) + '%';
+      }
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var data = validate();
+        if (!data) {
+          placeholder.classList.remove('hidden');
+          results.classList.add('hidden');
+          return;
+        }
+
+        render(data, calculate(data));
+      });
+
+      // Al corregir un campo, se limpia su error
+      [amountInput, rateInput, yearsInput].forEach(function (input) {
+        input.addEventListener('input', function () {
+          input.classList.remove('invalid');
+          input.removeAttribute('aria-invalid');
+          var errorEl = document.getElementById(input.id + '-error');
+          errorEl.textContent = '';
+          errorEl.classList.remove('visible');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
