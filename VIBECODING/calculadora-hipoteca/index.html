@@ -285,6 +285,208 @@
     .placeholder .icon { font-size: 34px; margin-bottom: 12px; opacity: 0.75; }
     .placeholder p { margin: 0; font-size: 13.5px; line-height: 1.6; max-width: 220px; }
 
+    /* ---------- Gráfico de Amortización ---------- */
+    .chart-panel {
+      grid-column: 1 / -1;
+      padding: 32px 38px;
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .chart-header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .chart-legend i {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 6px;
+      border-radius: 2px;
+    }
+
+    .chart-scroll {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      padding-top: 24px;
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 200px;
+      min-width: 100%;
+      padding: 0 4px;
+    }
+
+    .bar-col {
+      flex: 1;
+      min-width: 18px;
+      max-width: 44px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      position: relative;
+    }
+
+    .bar-track {
+      width: 100%;
+      height: 170px;
+      display: flex;
+      flex-direction: column-reverse;
+      background: #f1f5f9;
+      border-radius: 6px 6px 0 0;
+      overflow: hidden;
+    }
+
+    .bar-seg-capital {
+      width: 100%;
+      background: var(--accent);
+      transition: height 0.3s ease;
+    }
+
+    .bar-seg-interest {
+      width: 100%;
+      background: #f59e0b;
+      transition: height 0.3s ease;
+    }
+
+    .bar-label {
+      margin-top: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .bar-col .tooltip {
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0f172a;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      white-space: nowrap;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      transition: opacity 0.2s, visibility 0.2s;
+      pointer-events: none;
+    }
+
+    .bar-col .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: #0f172a transparent transparent transparent;
+    }
+
+    .bar-col:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .bar-col:hover .bar-track {
+      filter: brightness(0.95);
+    }
+
+    /* ---------- Tabla de Amortización ---------- */
+    .table-panel {
+      grid-column: 1 / -1;
+      padding: 32px 38px;
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .table-panel h2 {
+      margin: 0 0 16px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .table-wrap {
+      max-height: 400px;
+      overflow-y: auto;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      text-align: right;
+    }
+
+    .table-wrap th,
+    .table-wrap td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .table-wrap th {
+      position: sticky;
+      top: 0;
+      background: #f8fafc;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      z-index: 1;
+    }
+
+    .table-wrap th:first-child,
+    .table-wrap td:first-child {
+      text-align: center;
+    }
+
+    .table-wrap tr:last-child td {
+      border-bottom: none;
+    }
+
+    .table-wrap tbody tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    .table-wrap tbody tr:hover {
+      background-color: #f1f5f9;
+    }
+
     .hidden { display: none !important; }
 
     @media (max-width: 720px) {
@@ -370,6 +572,36 @@
         </div>
       </div>
     </section>
+
+    <section id="chart-section" class="chart-panel hidden">
+      <div class="chart-header">
+        <h2>Gráfico de amortización por año</h2>
+        <div class="chart-legend">
+          <span><i style="background: var(--accent)"></i>Capital</span>
+          <span><i style="background: #f59e0b"></i>Intereses</span>
+        </div>
+      </div>
+      <div class="chart-scroll">
+        <div class="chart-bars" id="chart-bars"></div>
+      </div>
+    </section>
+
+    <section id="table-section" class="table-panel hidden">
+      <h2>Tabla de amortización anual</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Año</th>
+              <th>Intereses</th>
+              <th>Capital amortizado</th>
+              <th>Capital pendiente</th>
+            </tr>
+          </thead>
+          <tbody id="schedule-body"></tbody>
+        </table>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -387,6 +619,10 @@
       var totalInterestEl = document.getElementById('total-interest');
       var barCapital = document.getElementById('bar-capital');
       var barInterest = document.getElementById('bar-interest');
+      var chartSection = document.getElementById('chart-section');
+      var chartBars = document.getElementById('chart-bars');
+      var tableSection = document.getElementById('table-section');
+      var scheduleBody = document.getElementById('schedule-body');
 
       var euro = new Intl.NumberFormat('es-ES', {
         style: 'currency',
@@ -394,6 +630,40 @@
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       });
+
+      var STORAGE_KEY = 'hipoteca_last_values';
+
+      function saveValues(data) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            amount: amountInput.value,
+            rate: rateInput.value,
+            years: yearsInput.value
+          }));
+        } catch (e) {
+          // Si el almacenamiento local está restringido o lleno, no bloqueamos la app
+        }
+      }
+
+      function loadSavedValues() {
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          var saved = JSON.parse(raw);
+          if (saved) {
+            if (saved.amount !== undefined) amountInput.value = saved.amount;
+            if (saved.rate !== undefined) rateInput.value = saved.rate;
+            if (saved.years !== undefined) yearsInput.value = saved.years;
+
+            var data = validate();
+            if (data) {
+              render(data, calculate(data));
+            }
+          }
+        } catch (e) {
+          // Manejo seguro en caso de datos corruptos
+        }
+      }
 
       function parseValue(input) {
         // Acepta tanto "3,5" como "3.5"
@@ -479,12 +749,113 @@
         var totalPaid = payment * months;
         var totalInterest = totalPaid - data.amount;
 
+        var annualSchedule = [];
+        var remaining = data.amount;
+        var currentYearInterest = 0;
+        var currentYearCapital = 0;
+
+        for (var m = 1; m <= months; m++) {
+          var interestMonth = remaining * monthlyRate;
+          var capitalMonth = payment - interestMonth;
+
+          if (capitalMonth > remaining || m === months) {
+            capitalMonth = remaining;
+            remaining = 0;
+          } else {
+            remaining -= capitalMonth;
+            if (remaining < 0.0001) remaining = 0;
+          }
+
+          currentYearInterest += interestMonth;
+          currentYearCapital += capitalMonth;
+
+          if (m % 12 === 0 || m === months) {
+            var yearNum = Math.ceil(m / 12);
+            annualSchedule.push({
+              year: yearNum,
+              interest: currentYearInterest,
+              capital: currentYearCapital,
+              pending: remaining
+            });
+            currentYearInterest = 0;
+            currentYearCapital = 0;
+          }
+        }
+
         return {
           months: months,
           payment: payment,
           totalPaid: totalPaid,
-          totalInterest: totalInterest
+          totalInterest: totalInterest,
+          annualSchedule: annualSchedule
         };
+      }
+
+      function renderChart(schedule) {
+        chartBars.innerHTML = '';
+        if (!schedule || schedule.length === 0) return;
+
+        var maxAnnualTotal = 0;
+        schedule.forEach(function (row) {
+          var tot = row.interest + row.capital;
+          if (tot > maxAnnualTotal) maxAnnualTotal = tot;
+        });
+
+        if (maxAnnualTotal === 0) maxAnnualTotal = 1;
+
+        schedule.forEach(function (row) {
+          var capPct = ((row.capital / maxAnnualTotal) * 100).toFixed(2);
+          var intPct = ((row.interest / maxAnnualTotal) * 100).toFixed(2);
+
+          var barCol = document.createElement('div');
+          barCol.className = 'bar-col';
+
+          var tooltip = document.createElement('div');
+          tooltip.className = 'tooltip';
+          tooltip.innerHTML =
+            '<strong>Año ' + row.year + '</strong><br>' +
+            'Capital: ' + euro.format(row.capital) + '<br>' +
+            'Intereses: ' + euro.format(row.interest);
+
+          var barTrack = document.createElement('div');
+          barTrack.className = 'bar-track';
+
+          var segCap = document.createElement('div');
+          segCap.className = 'bar-seg-capital';
+          segCap.style.height = capPct + '%';
+
+          var segInt = document.createElement('div');
+          segInt.className = 'bar-seg-interest';
+          segInt.style.height = intPct + '%';
+
+          barTrack.appendChild(segCap);
+          barTrack.appendChild(segInt);
+
+          var label = document.createElement('div');
+          label.className = 'bar-label';
+          label.textContent = row.year;
+
+          barCol.appendChild(tooltip);
+          barCol.appendChild(barTrack);
+          barCol.appendChild(label);
+
+          chartBars.appendChild(barCol);
+        });
+
+        chartSection.classList.remove('hidden');
+      }
+
+      function renderSchedule(schedule) {
+        scheduleBody.innerHTML = '';
+        schedule.forEach(function (row) {
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + row.year + '</td>' +
+            '<td>' + euro.format(row.interest) + '</td>' +
+            '<td>' + euro.format(row.capital) + '</td>' +
+            '<td>' + euro.format(row.pending) + '</td>';
+          scheduleBody.appendChild(tr);
+        });
       }
 
       function render(data, result) {
@@ -505,6 +876,10 @@
 
         barInterest.style.width = interestShare.toFixed(2) + '%';
         barCapital.style.width = (100 - interestShare).toFixed(2) + '%';
+
+        renderChart(result.annualSchedule);
+        renderSchedule(result.annualSchedule);
+        tableSection.classList.remove('hidden');
       }
 
       form.addEventListener('submit', function (event) {
@@ -514,11 +889,17 @@
         if (!data) {
           placeholder.classList.remove('hidden');
           results.classList.add('hidden');
+          chartSection.classList.add('hidden');
+          tableSection.classList.add('hidden');
           return;
         }
 
+        saveValues(data);
         render(data, calculate(data));
       });
+
+      // Restaurar los últimos valores usados al cargar la página
+      loadSavedValues();
 
       // Al corregir un campo, se limpia su error
       [amountInput, rateInput, yearsInput].forEach(function (input) {
